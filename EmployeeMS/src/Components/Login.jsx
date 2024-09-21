@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Style.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   // handling the login values with a hooke//
@@ -9,18 +10,32 @@ export const Login = () => {
     password: "",
   });
 
+  // creating instance of useNavigate
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  // configuration for cookies //
+  axios.defaults.withCredentials = true;
+
   // submitting the value on the form with this function//
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
       .post("http://localhost:3000/auth/adminlogin", values)
-      .then((result) => console.log(result))
+      .then((result) => {
+        if (result.data.loginStatus) {
+          navigate("/dashboard");
+        } else {
+          setError(result.data.Error);
+        }
+      })
       .catch((err) => console.log(err));
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 loginPage">
       <div className="p-3 rounded w-25 border loginForm text-white">
+        <div className="text-danger">{error && <p>{error}</p>}</div>
+
         <h2>Login Page</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3 text-white">

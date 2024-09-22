@@ -24,9 +24,7 @@ const Add_category = () => {
         <h2>Add Category</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="category">
-              <strong>Category</strong>
-            </label>
+            <label htmlFor="category">{/* <strong>Category</strong> */}</label>
             <input
               className="form-control rounded-0"
               type="text"

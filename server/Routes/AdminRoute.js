@@ -42,13 +42,14 @@ router.post("/add_category", (req, res) => {
 
 router.get("/category", (req, res) => {
   const sql = "SELECT * FROM category";
-  con.query(sql, (err, result) => {
+  con.query(sql, (err, results) => {
     if (err) {
       return res.json({ Status: false, Error: "query error" });
     } else {
-      return res.json({ Status: true });
+      return res.json({ Status: true, Result: results });
     }
   });
 });
+
 
 export { router as adminRouter };

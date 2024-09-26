@@ -28,11 +28,19 @@ const Add_employee = () => {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:3000/auth/add_employee",employee)
+      .then((result) => console.log(result))
+      .catch((err) => console.log(err));
+  };
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
       <div className="p-3 rounded w-50 border">
         <h3 className="text-center">Add Employee</h3>
-        <form className="row g-1">
+        <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
             <label className="form-label">Name</label>
             <input

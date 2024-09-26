@@ -1,6 +1,7 @@
 import express from "express";
 import con from "../utils/db.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 // creating a router //
 const router = express.Router();
@@ -51,5 +52,39 @@ router.get("/category", (req, res) => {
   });
 });
 
+// add employee //
+// add employee
+router.post("/add_employee", (req, res) => {
+  const sql =
+    "INSERT INTO employee (name, email, password, salary, address, category_id, image) VALUES (?)";
+
+  bcrypt.hash(req.body.password, 10, (err, hash) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ Status: false, Error: "Password hashing error" });
+    }
+
+    const values = [
+      req.body.name,
+      req.body.email,
+      hash,
+      req.body.salary,
+      req.body.address,
+      req.body.category_id,
+      req.body.image,
+    ];
+
+    con.query(sql, [values], (err, result) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ Status: false, Error: "Database query error" });
+      } else {
+        return res.json({ Status: true, Result: result });
+      }
+    });
+  });
+});
 
 export { router as adminRouter };

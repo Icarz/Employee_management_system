@@ -88,10 +88,10 @@ router.post("/add_employee", upload.single("image"), (req, res) => {
       req.body.name,
       req.body.email,
       hash,
-      req.body.salary, 
-      req.body.address, 
-      req.body.category_id, 
-      req.file.filename, 
+      req.body.salary,
+      req.body.address,
+      req.body.category_id,
+      req.file.filename,
     ];
 
     con.query(sql, [values], (err, result) => {
@@ -116,5 +116,42 @@ router.get("/employee", (req, res) => {
     }
   });
 });
+
+// get employee by id
+
+router.get("/employee/:id", (req, res) => {
+  const id = req.params.id;
+  // console.log("Employee ID:", id);
+
+  const sql = "SELECT * FROM employee WHERE id = ?";
+
+  con.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ Status: false, Error: "query error" });
+    } else if (result.length === 0) {
+      return res
+        .status(404)
+        .json({ Status: false, Error: "Employee not found" });
+    } else {
+      return res.json({ Status: true, Employee: result[0] });
+    }
+  });
+});
+
+router.put("/edit_employee/:id", (req, res) => {
+  const id = req.params.id;
+  const { name, email, salary, address, category_id } = req.body;
+  const sql = "UPDATE employee SET name = ?, email = ?, salary = ?, address = ?, category_id = ? WHERE id = ?";
+  con.query(sql, [name, email, salary, address, category_id, id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ Status: false, Error: "query error" });
+    } else if (result.affectedRows === 0) {
+      return res.status(404).json({ Status: false, Error: "Employee not found" });
+    } else {
+      return res.json({ Status: true, Message: "Employee updated successfully" });
+    }
+  });
+});
+
 
 export { router as adminRouter };

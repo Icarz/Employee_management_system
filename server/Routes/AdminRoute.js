@@ -141,17 +141,73 @@ router.get("/employee/:id", (req, res) => {
 router.put("/edit_employee/:id", (req, res) => {
   const id = req.params.id;
   const { name, email, salary, address, category_id } = req.body;
-  const sql = "UPDATE employee SET name = ?, email = ?, salary = ?, address = ?, category_id = ? WHERE id = ?";
-  con.query(sql, [name, email, salary, address, category_id, id], (err, result) => {
+  const sql =
+    "UPDATE employee SET name = ?, email = ?, salary = ?, address = ?, category_id = ? WHERE id = ?";
+  con.query(
+    sql,
+    [name, email, salary, address, category_id, id],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ Status: false, Error: "query error" });
+      } else if (result.affectedRows === 0) {
+        return res
+          .status(404)
+          .json({ Status: false, Error: "Employee not found" });
+      } else {
+        return res.json({
+          Status: true,
+          Message: "Employee updated successfully",
+        });
+      }
+    }
+  );
+});
+
+router.delete("/delete_employee/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = "DELETE FROM employee WHERE id = ?";
+  con.query(sql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ Status: false, Error: "query error" });
     } else if (result.affectedRows === 0) {
-      return res.status(404).json({ Status: false, Error: "Employee not found" });
+      return res
+        .status(404)
+        .json({ Status: false, Error: "Employee not found" });
     } else {
-      return res.json({ Status: true, Message: "Employee updated successfully" });
+      return res.json({
+        Status: true,
+        Message: "Employee deleted successfully",
+      });
     }
   });
 });
 
+// admin_count API //
+router.get("/admin_count", (req, res) => {
+  const sql = "select count(id) as admin from  admin ";
+  con.query(sql, (err, result) => {
+    if (err) return res.json({ status: false, Error: "query error" + err });
+    return res.json({ status: true, Result: result });
+  });
+});
+
+// employee_count API //
+
+router.get("/employee_count", (req, res) => {
+  const sql = "select count(id) as employee from employee";
+  con.query(sql, (err, result) => {
+    if (err) return res.json({ status: false, Error: "query error" + err });
+    return res.json({ status: true, Result: result });
+  });
+});
+
+// Salary_count API //
+router.get("/salary_count", (req, res) => {
+  const sql = "select sum(salary) as salary from employee";
+  con.query(sql, (err, result) => {
+    if (err) return res.json({ status: false, Error: "query error" + err });
+    return res.json({ status: true, Result: result });
+  });
+});
 
 export { router as adminRouter };

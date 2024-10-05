@@ -42,7 +42,7 @@ router.post("/add_category", (req, res) => {
     }
   });
 });
-
+// get category route APi //
 router.get("/category", (req, res) => {
   const sql = "SELECT * FROM category";
   con.query(sql, (err, results) => {
@@ -70,7 +70,7 @@ const upload = multer({
   storage: storage,
 });
 
-// end  images upload
+// end  images upload //
 
 // add employee //
 router.post("/add_employee", upload.single("image"), (req, res) => {
@@ -105,7 +105,7 @@ router.post("/add_employee", upload.single("image"), (req, res) => {
     });
   });
 });
-
+// get employee //
 router.get("/employee", (req, res) => {
   const sql = "SELECT * FROM employee";
   con.query(sql, (err, results) => {
@@ -118,7 +118,6 @@ router.get("/employee", (req, res) => {
 });
 
 // get employee by id
-
 router.get("/employee/:id", (req, res) => {
   const id = req.params.id;
   // console.log("Employee ID:", id);
@@ -137,7 +136,7 @@ router.get("/employee/:id", (req, res) => {
     }
   });
 });
-
+// edit employee //
 router.put("/edit_employee/:id", (req, res) => {
   const id = req.params.id;
   const { name, email, salary, address, category_id } = req.body;
@@ -162,7 +161,7 @@ router.put("/edit_employee/:id", (req, res) => {
     }
   );
 });
-
+// delete employee//
 router.delete("/delete_employee/:id", (req, res) => {
   const id = req.params.id;
   const sql = "DELETE FROM employee WHERE id = ?";
@@ -209,5 +208,21 @@ router.get("/salary_count", (req, res) => {
     return res.json({ status: true, Result: result });
   });
 });
+
+// admin_records API //
+router.get("/admin_records", (req, res) => {
+  const sql = "SELECT * FROM admin";
+  con.query(sql, (err, result) => {
+    if (err) return res.json({ status: false, Error: "query error" + err });
+    // console.log("Admin records:", result);  // Check if result is what you expect
+    return res.json({ status: true, Result: result });
+  });
+});
+
+// logout endpoint // 
+router.get("/logout",(req,res)=>{
+  res.clearCookie('token');
+  return res.json({Status: true})
+})
 
 export { router as adminRouter };

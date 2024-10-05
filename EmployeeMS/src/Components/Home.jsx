@@ -2,15 +2,27 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const Home = () => {
-  const [adminTotal, setAdminTotal] = useState();
-  const [employeeTotal, setEmployeeTotal] = useState();
-  const [salaryTotal, setSalaryTotal] = useState();
+  const [adminTotal, setAdminTotal] = useState(0);
+  const [employeeTotal, setEmployeeTotal] = useState(0);
+  const [salaryTotal, setSalaryTotal] = useState(0);
+  const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
     adminCount();
     employeeCount();
     salaryCount();
+    adminRecords();
   }, []);
+  const adminRecords = () => {
+    axios.get("http://localhost:3000/auth/admin_records").then((result) => {
+      if (result.data.status) {
+        // console.log("Admin records:", result.data.Result); // Log the data
+        setAdmins(result.data.Result);
+      } else {
+        alert(result.data.Error);
+      }
+    });
+  };
 
   const adminCount = () => {
     axios.get("http://localhost:3000/auth/admin_count").then((result) => {
@@ -35,6 +47,7 @@ const Home = () => {
       }
     });
   };
+
   return (
     <div>
       <div className="p-3 d-flex justify-content-around mt-3">
@@ -65,9 +78,34 @@ const Home = () => {
           <hr />
           <div className="d-flex justify-content-around">
             <h5>Total:</h5>
-            <h5>{salaryTotal}</h5>
+            <h5>${salaryTotal}</h5>
           </div>
         </div>
+      </div>
+      <div className="mt-4 px-5 pt-3">
+        <h3>Admins List</h3>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+           {
+            admins.map((a) => (
+              <tr key={a.email}>
+                <td>{a.email}</td>
+                <td>
+                  <button className="btn btn-info btn-sm me-2">Edit</button>
+                  <button className="btn btn-warning btn-sm">Delete</button>
+                </td>
+              </tr>
+            ))
+            
+           }
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import "./Style.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./Style.css";
 
-export const Login = () => {
-  // handling the login values with a hooke//
+const Employee_login = () => {
+     // handling the login values with a hooke//
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -20,7 +20,7 @@ export const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:3000/auth/adminlogin", values)
+      .post("http://localhost:3000/auth/employee_login", values)
       .then((result) => {
         if (result.data.loginStatus) {
           navigate("/dashboard");
@@ -36,7 +36,7 @@ export const Login = () => {
       <div className="p-3 rounded w-25 border loginForm text-white">
         <div className="text-danger">{error && <p>{error}</p>}</div>
 
-        <h2>Admin Login</h2>
+        <h2>Employee Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3 text-white">
             <label htmlFor="email">
@@ -76,5 +76,7 @@ export const Login = () => {
         </form>
       </div>
     </div>
-  );
+  )
 };
+
+export default Employee_login;

@@ -12,12 +12,14 @@ import Add_employee from "./Components/Add_employee";
 import Edit_employee from "./Components/Edit_employee";
 import Start from "./Components/start";
 import Employee_login from "./Components/Employee_login";
+import Employee_detail from "./Components/Employee_detail";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/start" element={<Start/>}></Route>
+        <Route path="/start" element={<Start />}></Route>
+        <Route path="/employee_detail/:id" element={<Employee_detail />}></Route>
         <Route path="/adminlogin" element={<Login />}></Route>
         <Route path="/employee_login" element={<Employee_login />}></Route>
         <Route path="/dashboard" element={<Dashboard />}>

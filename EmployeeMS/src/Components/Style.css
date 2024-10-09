@@ -14,3 +14,10 @@ loginForm{
     width: 40px;
     height: 40px
 }
+
+.emp_det_image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover; /* Ensures the image maintains aspect ratio while filling the box */
+    border-radius: 50%; /* Optional: Makes the image circular */
+  }

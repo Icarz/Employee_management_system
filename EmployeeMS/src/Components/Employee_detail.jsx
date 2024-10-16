@@ -15,7 +15,7 @@ const Employee_detail = () => {
   const handleLogout = () => {
     axios.get("http://localhost:3000/employee/logout").then((result) => {
       if (result.data.Status) {
-        navigate("/start");
+        navigate("/");
       }
     });
   };
